@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
+import Task from "./Task";
 
 function TaskForm() {
   const today = new Date();
@@ -26,6 +27,16 @@ function TaskForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    function addCard(titleCard, description, deadline, status) {
+      const newTask = { titleCard, description, deadline, status };
+
+      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+      tasks.unshift(newTask);
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
     try {
       if (
         titleCard === "" ||
@@ -37,6 +48,7 @@ function TaskForm() {
       }
 
       console.log({ titleCard, description, deadline, status });
+      addCard(titleCard, description, deadline, status);
 
       setTitleCard("");
       setDescription("");
