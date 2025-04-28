@@ -14,7 +14,7 @@ function Task({ task }) {
       <Card variant="outlined" sx={{ marginBottom: 2 }}>
         <CardContent>
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            {task.title}
+            {task.titleCard}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {task.description}
