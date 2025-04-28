@@ -11,17 +11,22 @@ import {
 import { useState } from "react";
 
 function TaskForm() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Добавляем ведущий ноль, если месяц меньше 10
+  const day = today.getDate().toString().padStart(2, "0"); // Добавляем ведущий ноль, если день меньше 10
+
+  const formattedDate = `${year}-${month}-${day}`;
   const [titleCard, setTitleCard] = useState("");
   const [description, setDescription] = useState("");
-  const [deadline, setDeadline] = useState("");
+  const [deadline, setDeadline] = useState(formattedDate);
   const [status, setStatus] = useState("");
-  const [error, setError] = useState(""); // Состояние для ошибки
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     try {
-      // Проверка на пустые поля
       if (
         titleCard === "" ||
         description === "" ||
@@ -31,18 +36,15 @@ function TaskForm() {
         throw new Error("Все поля должны быть заполнены!");
       }
 
-      // Если все поля заполнены, можно выполнить отправку
       console.log({ titleCard, description, deadline, status });
 
-      // Очистка формы после отправки
       setTitleCard("");
       setDescription("");
-      setDeadline("");
+      setDeadline(formattedDate);
       setStatus("");
-      setError(""); // Очистка ошибки, если все поля заполнены
+      setError("");
     } catch (error) {
-      // Обработка ошибки
-      setError(error.message); // Устанавливаем сообщение ошибки
+      setError(error.message);
     }
   };
 
@@ -68,13 +70,14 @@ function TaskForm() {
         margin="normal"
       />
       <TextField
+        id="date"
         label="Deadline"
-        value={deadline}
-        onChange={(e) => setDeadline(e.target.value)}
-        fullWidth
-        margin="normal"
+        type="date"
+        defaultValue={deadline}
+        InputLabelProps={{
+          shrink: true,
+        }}
       />
-
       <FormControl fullWidth margin="normal">
         <InputLabel id="status-label">Status</InputLabel>
         <Select
