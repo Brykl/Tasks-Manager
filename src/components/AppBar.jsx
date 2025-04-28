@@ -8,7 +8,10 @@ import Button from "@mui/material/Button";
 export default function DefaultAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{ backgroundColor: "#1976d2", height: "100%" }}
+      >
         <Toolbar sx={{ display: "flex", justifyContent: "center" }}>
           <Typography variant="h6" component="div">
             Task Manager
