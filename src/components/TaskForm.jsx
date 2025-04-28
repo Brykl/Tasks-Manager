@@ -67,6 +67,9 @@ function TaskForm() {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         fullWidth
+        multiline
+        rows={4}
+        rowsMax={6}
         margin="normal"
       />
       <TextField
