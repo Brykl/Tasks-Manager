@@ -30,12 +30,7 @@ function TaskForm() {
     e.preventDefault();
 
     try {
-      if (
-        titleCard === "" ||
-        description === "" ||
-        deadline === "" ||
-        status === ""
-      ) {
+      if (!titleCard || !description || !deadline || !status) {
         throw new Error("Все поля должны быть заполнены!");
       }
 
@@ -47,11 +42,9 @@ function TaskForm() {
         status,
       };
 
-      const response = await axios.post("http://localhost:3030/notes", newTask);
+      await axios.post("http://localhost:3030/notes", newTask);
 
-      console.log("Задача успешно отправлена:", response.data);
-
-      // Очистка формы
+      // Очищаем форму
       setTitleCard("");
       setDescription("");
       setDeadline(formattedDate);

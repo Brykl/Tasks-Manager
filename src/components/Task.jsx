@@ -44,7 +44,7 @@ function Task({ task }) {
             }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-            {task.titleCard}
+            {task.title}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {task.description}
