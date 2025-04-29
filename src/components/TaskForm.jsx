@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import Task from "./Task";
+import { v4 as uuidv4 } from "uuid";
 
 function TaskForm() {
   const today = new Date();
@@ -23,12 +24,13 @@ function TaskForm() {
   const [deadline, setDeadline] = useState(formattedDate);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const [id, setId] = useState(uuidv4());
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    function addCard(titleCard, description, deadline, status) {
-      const newTask = { titleCard, description, deadline, status };
+    function addCard(titleCard, description, deadline, status, id) {
+      const newTask = { titleCard, description, deadline, status, id };
 
       const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
@@ -48,13 +50,14 @@ function TaskForm() {
       }
 
       console.log({ titleCard, description, deadline, status });
-      addCard(titleCard, description, deadline, status);
+      addCard(titleCard, description, deadline, status, id);
 
       setTitleCard("");
       setDescription("");
       setDeadline(formattedDate);
       setStatus("");
       setError("");
+      setId(uuidv4());
     } catch (error) {
       setError(error.message);
     }

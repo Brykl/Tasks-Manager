@@ -21,7 +21,13 @@ function MainPage() {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
       <Box sx={{ flexShrink: 0 }}>
         <DefaultAppBar />
       </Box>
@@ -37,7 +43,11 @@ function MainPage() {
           <TaskForm addTask={addTask} />{" "}
           <Box sx={{ width: "50%" }}>
             {tasks.length === 0 ? (
-              <Typography variant="h6" color="textSecondary">
+              <Typography
+                variant="h6"
+                color="textSecondary"
+                sx={{ fontSize: "35px" }}
+              >
                 No tasks available
               </Typography>
             ) : (
