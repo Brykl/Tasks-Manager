@@ -9,14 +9,14 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import Task from "./Task";
+import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
 function TaskForm() {
   const today = new Date();
   const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, "0"); // Добавляем ведущий ноль, если месяц меньше 10
-  const day = today.getDate().toString().padStart(2, "0"); // Добавляем ведущий ноль, если день меньше 10
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  const day = today.getDate().toString().padStart(2, "0");
 
   const formattedDate = `${year}-${month}-${day}`;
   const [titleCard, setTitleCard] = useState("");
@@ -26,18 +26,8 @@ function TaskForm() {
   const [error, setError] = useState("");
   const [id, setId] = useState(uuidv4());
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    function addCard(titleCard, description, deadline, status, id) {
-      const newTask = { titleCard, description, deadline, status, id };
-
-      const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-      tasks.unshift(newTask);
-
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-    }
 
     try {
       if (
@@ -49,9 +39,19 @@ function TaskForm() {
         throw new Error("Все поля должны быть заполнены!");
       }
 
-      console.log({ titleCard, description, deadline, status });
-      addCard(titleCard, description, deadline, status, id);
+      const newTask = {
+        id,
+        title: titleCard,
+        description,
+        deadline,
+        status,
+      };
 
+      const response = await axios.post("http://localhost:3030/notes", newTask);
+
+      console.log("Задача успешно отправлена:", response.data);
+
+      // Очистка формы
       setTitleCard("");
       setDescription("");
       setDeadline(formattedDate);
@@ -59,7 +59,8 @@ function TaskForm() {
       setError("");
       setId(uuidv4());
     } catch (error) {
-      setError(error.message);
+      console.error("Ошибка при отправке:", error);
+      setError("Не удалось отправить задачу");
     }
   };
 
@@ -84,17 +85,19 @@ function TaskForm() {
         fullWidth
         multiline
         rows={4}
-        rowsMax={6}
         margin="normal"
       />
       <TextField
         id="date"
         label="Deadline"
         type="date"
-        defaultValue={deadline}
+        value={deadline}
+        onChange={(e) => setDeadline(e.target.value)}
         InputLabelProps={{
           shrink: true,
         }}
+        fullWidth
+        margin="normal"
       />
       <FormControl fullWidth margin="normal">
         <InputLabel id="status-label">Status</InputLabel>

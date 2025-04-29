@@ -14,6 +14,18 @@ import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 function Task({ task }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
 
+  // React.useEffect(() => {
+  //   console.log(dataTasks);
+  // }, []);
+
+  function deleteTask(id) {
+    const dataTasks = localStorage.getItem("tasks");
+    const tasks = JSON.parse(dataTasks);
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+  }
+
   return (
     <Box sx={{ width: "100%", padding: 2, position: "relative" }}>
       <Card variant="outlined" sx={{ marginBottom: 2 }}>
@@ -27,7 +39,9 @@ function Task({ task }) {
               color: "gray",
               fontSize: "30px",
             }}
-            onClick
+            onClick={() => {
+              deleteTask(task.id);
+            }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
             {task.titleCard}
