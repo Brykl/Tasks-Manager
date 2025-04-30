@@ -1,38 +1,22 @@
+/* MainPage.jsx */
 import { Box, Typography } from "@mui/material";
 import DefaultAppBar from "../components/AppBar";
 import Task from "../components/Task";
 import TaskForm from "../components/TaskForm";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function MainPage() {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:3030");
-
-    socket.onopen = () => {
-      console.log("WebSocket connected");
-    };
-
-    socket.onmessage = ({ data }) => {
-      const message = JSON.parse(data);
-      if (message.type === "notes") {
-        setTasks(message.data);
-      }
-    };
-
-    socket.onerror = (err) => {
-      console.error("WebSocket error:", err);
-    };
-
-    socket.onclose = () => {
-      console.log("WebSocket closed");
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []); // пустой массив зависимостей, чтобы не пересоздавать сокет на каждый ререндер
+    fetch("http://localhost:3030/notes")
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+        console.log("📥 Загрузили задачи:", data);
+      })
+      .catch((err) => console.error("❌ Ошибка при загрузке задач:", err));
+  }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>

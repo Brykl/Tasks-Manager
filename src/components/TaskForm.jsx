@@ -1,11 +1,11 @@
 import {
   Box,
+  Typography,
   Button,
   InputLabel,
   FormControl,
   Select,
   MenuItem,
-  Typography,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
@@ -15,59 +15,53 @@ import { v4 as uuidv4 } from "uuid";
 function TaskForm() {
   const today = new Date();
   const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, "0");
-  const day = today.getDate().toString().padStart(2, "0");
-
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
-  const [titleCard, setTitleCard] = useState("");
+
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState(formattedDate);
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
-  const [id, setId] = useState(uuidv4());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title || !description || !deadline || !status) {
+      setError("Все поля должны быть заполнены!");
+      return;
+    }
 
     try {
-      if (!titleCard || !description || !deadline || !status) {
-        throw new Error("Все поля должны быть заполнены!");
-      }
-
-      const newTask = {
-        id,
-        title: titleCard,
+      await axios.post("http://localhost:3030/notes", {
+        id: uuidv4(),
+        title,
         description,
         deadline,
         status,
-      };
-
-      await axios.post("http://localhost:3030/notes", newTask);
-
-      // Очищаем форму
-      setTitleCard("");
+      });
+      setTitle("");
       setDescription("");
       setDeadline(formattedDate);
       setStatus("");
       setError("");
-      setId(uuidv4());
-    } catch (error) {
-      console.error("Ошибка при отправке:", error);
-      setError("Не удалось отправить задачу");
+    } catch (err) {
+      console.error(err);
+      setError("Ошибка при отправке задачи");
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ width: "300px" }}>
+    <Box component="form" onSubmit={handleSubmit} sx={{ width: 300 }}>
       {error && (
-        <Typography color="error" variant="body2" sx={{ marginBottom: 2 }}>
+        <Typography color="error" variant="body2" sx={{ mb: 1 }}>
           {error}
         </Typography>
       )}
       <TextField
         label="Title"
-        value={titleCard}
-        onChange={(e) => setTitleCard(e.target.value)}
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
         fullWidth
         margin="normal"
       />
@@ -81,32 +75,23 @@ function TaskForm() {
         margin="normal"
       />
       <TextField
-        id="date"
-        label="Deadline"
         type="date"
+        label="Deadline"
         value={deadline}
         onChange={(e) => setDeadline(e.target.value)}
-        InputLabelProps={{
-          shrink: true,
-        }}
+        InputLabelProps={{ shrink: true }}
         fullWidth
         margin="normal"
       />
       <FormControl fullWidth margin="normal">
-        <InputLabel id="status-label">Status</InputLabel>
-        <Select
-          labelId="status-label"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          label="Status"
-        >
+        <InputLabel>Status</InputLabel>
+        <Select value={status} onChange={(e) => setStatus(e.target.value)}>
           <MenuItem value="pending">Pending</MenuItem>
           <MenuItem value="in-progress">In Progress</MenuItem>
           <MenuItem value="completed">Completed</MenuItem>
         </Select>
       </FormControl>
-
-      <Button type="submit" variant="contained" color="primary">
+      <Button type="submit" variant="contained" sx={{ mt: 2 }}>
         Submit
       </Button>
     </Box>

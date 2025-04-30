@@ -10,13 +10,10 @@ import {
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
+import changeStatus from "../services/statePut";
 
 function Task({ task }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
-
-  // React.useEffect(() => {
-  //   console.log(dataTasks);
-  // }, []);
 
   function deleteTask(id) {
     const dataTasks = localStorage.getItem("tasks");
@@ -74,6 +71,7 @@ function Task({ task }) {
                 }}
                 onClick={() => {
                   setCurrentStatus("in-progress");
+                  changeStatus(task.id, "in-progress");
                 }}
               />
             ) : (
@@ -88,6 +86,7 @@ function Task({ task }) {
                 }}
                 onClick={() => {
                   setCurrentStatus("completed");
+                  changeStatus(task.id, "completed");
                 }}
               />
             )}
