@@ -13,17 +13,20 @@ import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import changeStatus from "../services/statePut";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
+import deleteTask from "../services/taskDelete";
 
-function Task({ task }) {
+function Task({ task, fetchTasks }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
 
-  function deleteTask(id) {
-    const dataTasks = localStorage.getItem("tasks");
-    const tasks = JSON.parse(dataTasks);
-    const updatedTasks = tasks.filter((task) => task.id !== id);
-
-    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
-  }
+  // Обновляем задачи после удаления
+  const handleDelete = async () => {
+    try {
+      await deleteTask(task.id); // Удаляем задачу
+      fetchTasks(); // Обновляем список задач
+    } catch (err) {
+      console.error("Ошибка при удалении задачи:", err);
+    }
+  };
 
   return (
     <Box sx={{ width: "100%", padding: 2, position: "relative" }}>
@@ -38,9 +41,7 @@ function Task({ task }) {
               color: "gray",
               fontSize: "30px",
             }}
-            onClick={() => {
-              deleteTask(task.id);
-            }}
+            onClick={handleDelete}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
             {task.title}

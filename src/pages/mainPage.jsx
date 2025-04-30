@@ -1,22 +1,20 @@
-/* MainPage.jsx */
 import { Box, Typography } from "@mui/material";
 import DefaultAppBar from "../components/AppBar";
 import Task from "../components/Task";
 import TaskForm from "../components/TaskForm";
 import { useEffect, useState } from "react";
 
-export default function MainPage() {
+function MainPage() {
   const [tasks, setTasks] = useState([]);
 
-  const fetchTasks = async () => {
-    try {
-      const res = await fetch("http://localhost:3030/notes");
-      const data = await res.json();
-      setTasks(data);
-      console.log("📥 Загрузили задачи:", data);
-    } catch (err) {
-      console.error("❌ Ошибка при загрузке задач:", err);
-    }
+  const fetchTasks = () => {
+    fetch("http://localhost:3030/notes")
+      .then((res) => res.json())
+      .then((data) => {
+        setTasks(data);
+        console.log("📥 Загрузили задачи:", data);
+      })
+      .catch((err) => console.error("❌ Ошибка при загрузке задач:", err));
   };
 
   useEffect(() => {
@@ -48,7 +46,9 @@ export default function MainPage() {
                 No tasks available
               </Typography>
             ) : (
-              tasks.map((task) => <Task key={task.id} task={task} />)
+              tasks.map((task) => (
+                <Task key={task.id} task={task} fetchTasks={fetchTasks} />
+              ))
             )}
           </Box>
         </Box>
@@ -56,3 +56,5 @@ export default function MainPage() {
     </Box>
   );
 }
+
+export default MainPage;

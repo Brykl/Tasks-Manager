@@ -47,7 +47,7 @@ function TaskForm({ onTaskAdded }) {
       setError("");
 
       if (onTaskAdded) {
-        onTaskAdded(); // вызов обновления задач в родителе
+        onTaskAdded();
       }
     } catch (err) {
       console.error(err);
