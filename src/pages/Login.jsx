@@ -2,7 +2,7 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import DefaultAppBar from "../components/AppBar";
 
-function Register() {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -14,7 +14,7 @@ function Register() {
 
   return (
     <>
-      <DefaultAppBar AuthStatus="register" />
+      <DefaultAppBar AuthStatus="login" />
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -30,7 +30,7 @@ function Register() {
         }}
       >
         <Typography variant="h5" textAlign="center">
-          Регистрация
+          Войти
         </Typography>
         <TextField
           label="Username"
@@ -55,4 +55,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Login;
