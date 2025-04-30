@@ -1,15 +1,36 @@
 import { Box, Typography, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import DefaultAppBar from "../components/AppBar";
+import registerUser from "../services/registrationOnServer";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [registerErr, setRegisterErr] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+    setRegisterErr("");
+
+    try {
+      const data = await registerUser(username, password);
+      console.log("Успешная регистрация:", data);
+      navigate("/login");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const message =
+          error.response.data.error ||
+          error.response.data.message ||
+          "Неизвестная ошибка";
+
+        setRegisterErr(message);
+      } else {
+        setRegisterErr("Произошла ошибка при регистрации");
+      }
+    }
   };
 
   return (
@@ -29,6 +50,11 @@ function Register() {
           gap: 2,
         }}
       >
+        {registerErr && (
+          <>
+            <Typography sx={{ color: "red" }}>{registerErr}</Typography>
+          </>
+        )}
         <Typography variant="h5" textAlign="center">
           Регистрация
         </Typography>
