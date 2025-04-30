@@ -18,6 +18,8 @@ function Login() {
     try {
       const data = await login(username, password);
       console.log(data.message);
+      console.log(data);
+      localStorage.setItem("token", data.token);
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.data) {
