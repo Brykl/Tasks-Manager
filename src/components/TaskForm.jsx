@@ -12,7 +12,7 @@ import { useState } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 
-function TaskForm() {
+function TaskForm({ onTaskAdded }) {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -45,6 +45,10 @@ function TaskForm() {
       setDeadline(formattedDate);
       setStatus("");
       setError("");
+
+      if (onTaskAdded) {
+        onTaskAdded(); // вызов обновления задач в родителе
+      }
     } catch (err) {
       console.error(err);
       setError("Ошибка при отправке задачи");
@@ -85,7 +89,11 @@ function TaskForm() {
       />
       <FormControl fullWidth margin="normal">
         <InputLabel>Status</InputLabel>
-        <Select value={status} onChange={(e) => setStatus(e.target.value)}>
+        <Select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          label="Status"
+        >
           <MenuItem value="pending">Pending</MenuItem>
           <MenuItem value="in-progress">In Progress</MenuItem>
           <MenuItem value="completed">Completed</MenuItem>
