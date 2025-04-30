@@ -1,15 +1,36 @@
 import { Box, Typography, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import DefaultAppBar from "../components/AppBar";
+import { useNavigate } from "react-router-dom";
+import login from "../services/login";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loginErr, setLoginErr] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Username:", username);
-    console.log("Password:", password);
+    setLoginErr("");
+
+    try {
+      const data = await login(username, password);
+      console.log(data.message);
+      navigate("/login");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const message =
+          error.response.data.error ||
+          error.response.data.message ||
+          "Неизвестная ошибка";
+
+        setLoginErr(message);
+      } else {
+        setLoginErr("Произошла ошибка при входе");
+      }
+    }
   };
 
   return (
@@ -29,6 +50,11 @@ function Login() {
           gap: 2,
         }}
       >
+        {loginErr && (
+          <>
+            <Typography sx={{ color: "red" }}>{loginErr}</Typography>
+          </>
+        )}
         <Typography variant="h5" textAlign="center">
           Войти
         </Typography>
