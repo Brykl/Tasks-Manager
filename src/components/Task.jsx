@@ -11,6 +11,8 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckBoxOutlineBlankOutlinedIcon from "@mui/icons-material/CheckBoxOutlineBlankOutlined";
 import CheckBoxOutlinedIcon from "@mui/icons-material/CheckBoxOutlined";
 import changeStatus from "../services/statePut";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 
 function Task({ task }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
@@ -59,37 +61,92 @@ function Task({ task }) {
             <Typography variant="body2" color="textSecondary">
               Deadline: {task.deadline}
             </Typography>
-            {currentStatus === "completed" ? (
-              <CheckBoxOutlinedIcon
-                sx={{
-                  position: "absolute",
-                  cursor: "pointer",
-                  right: 140,
-                  "&:hover": {
-                    color: "red",
-                  },
-                }}
-                onClick={() => {
-                  setCurrentStatus("in-progress");
-                  changeStatus(task.id, "in-progress");
-                }}
-              />
-            ) : (
-              <CheckBoxOutlineBlankOutlinedIcon
-                sx={{
-                  position: "absolute",
-                  right: 140,
-                  cursor: "pointer",
-                  "&:hover": {
-                    color: "red",
-                  },
-                }}
-                onClick={() => {
-                  setCurrentStatus("completed");
-                  changeStatus(task.id, "completed");
-                }}
-              />
+            {currentStatus === "pending" && (
+              <>
+                <PlayCircleFilledWhiteIcon
+                  sx={{
+                    position: "absolute",
+                    right: 180,
+                    "&:hover": {
+                      color: "green",
+                    },
+                  }}
+                  onClick={() => {
+                    setCurrentStatus("in-progress");
+                    changeStatus(task.id, "in-progress");
+                  }}
+                />
+                <CheckBoxOutlineBlankOutlinedIcon
+                  sx={{
+                    position: "absolute",
+                    right: 140,
+                    cursor: "pointer",
+                    color: "gray",
+                    opacity: 0.7,
+                  }}
+                />
+              </>
             )}
+
+            {currentStatus === "in-progress" && (
+              <>
+                <PauseIcon
+                  sx={{
+                    position: "absolute",
+                    right: 180,
+                    "&:hover": {
+                      color: "orange",
+                    },
+                  }}
+                  onClick={() => {
+                    setCurrentStatus("pending");
+                    changeStatus(task.id, "pending");
+                  }}
+                />
+                <CheckBoxOutlineBlankOutlinedIcon
+                  sx={{
+                    position: "absolute",
+                    right: 140,
+                    cursor: "pointer",
+                    "&:hover": {
+                      color: "green",
+                    },
+                  }}
+                  onClick={() => {
+                    setCurrentStatus("completed");
+                    changeStatus(task.id, "completed");
+                  }}
+                />
+              </>
+            )}
+
+            {currentStatus === "completed" && (
+              <>
+                <PlayCircleFilledWhiteIcon
+                  sx={{
+                    position: "absolute",
+                    right: 180,
+                    "&:hover": {
+                      color: "blue",
+                    },
+                  }}
+                  onClick={() => {
+                    setCurrentStatus("in-progress");
+                    changeStatus(task.id, "in-progress");
+                  }}
+                />
+                <CheckBoxOutlinedIcon
+                  sx={{
+                    position: "absolute",
+                    right: 140,
+                    cursor: "pointer",
+                    color: "gray",
+                    opacity: 0.7,
+                  }}
+                />
+              </>
+            )}
+
             <Chip
               label={currentStatus}
               color={
