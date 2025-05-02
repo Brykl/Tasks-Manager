@@ -10,9 +10,10 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
+import { useParams } from "react-router-dom";
 
 function TaskForm({ onTaskAdded }) {
+  const { userName } = useParams();
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
@@ -32,14 +33,24 @@ function TaskForm({ onTaskAdded }) {
       return;
     }
 
+    const token = localStorage.getItem("token");
+    console.log("Токен из localStorage:", token);
+
     try {
-      await axios.post("http://localhost:3030/user/:userId/notes", {
-        id: uuidv4(),
-        title,
-        description,
-        deadline,
-        status,
-      });
+      await axios.post(
+        `http://localhost:3030/user/${userName}/notes`,
+        {
+          title,
+          description,
+          deadline,
+          status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setTitle("");
       setDescription("");
       setDeadline(formattedDate);
