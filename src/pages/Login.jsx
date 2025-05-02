@@ -20,7 +20,7 @@ function Login() {
       console.log(data.message);
       console.log(data);
       localStorage.setItem("token", data.token);
-      navigate("/login");
+      navigate(`/user/${username}`);
     } catch (error) {
       if (error.response && error.response.data) {
         const message =

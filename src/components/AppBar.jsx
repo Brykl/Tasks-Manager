@@ -40,6 +40,17 @@ export default function DefaultAppBar({ AuthStatus }) {
               <Typography sx={{ color: "white" }}>регистрация</Typography>
             </Box>
           )}
+          {AuthStatus === "profile" && (
+            <Box
+              sx={{ marginLeft: "auto", cursor: "pointer" }}
+              onClick={() => {
+                localStorage.removeItem("token"); // удаляем токен
+                navigate("/login"); // переходим на страницу логина
+              }}
+            >
+              <Typography sx={{ color: "white" }}>Выйти из аккаунта</Typography>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
     </Box>
