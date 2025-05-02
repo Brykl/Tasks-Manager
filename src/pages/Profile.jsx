@@ -19,7 +19,7 @@ export default function Profile() {
           <Box
             key={name}
             sx={{ height: "100px", width: "100px", bgcolor: "blue", m: 1 }}
-            onClick={() => navigate(`/user/${name}/notes`)}
+            onClick={() => navigate(`/user/${userName}/notes`)}
           >
             <Typography color="white">{name}</Typography>
           </Box>

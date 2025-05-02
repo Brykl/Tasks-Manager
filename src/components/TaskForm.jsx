@@ -33,7 +33,7 @@ function TaskForm({ onTaskAdded }) {
     }
 
     try {
-      await axios.post("http://localhost:3030/notes", {
+      await axios.post("http://localhost:3030/user/:userId/notes", {
         id: uuidv4(),
         title,
         description,
