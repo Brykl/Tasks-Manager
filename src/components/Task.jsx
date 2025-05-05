@@ -15,15 +15,51 @@ import PauseIcon from "@mui/icons-material/Pause";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import deleteTask from "../services/taskDelete";
 import EditIcon from "@mui/icons-material/Edit";
+import AlertDialogSlide from "./editTasks";
 
 function Task({ task, fetchTasks }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
+  const [isDialogOpen, setDialogOpen] = React.useState(false);
+  const [updatedTask, setUpdatedTask] = React.useState(task);
 
-  // Обновляем задачи после удаления
+  const handleOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
+
+  const handleConfirm = (newTitle, newDescription) => {
+    console.log("task.id: " + task.id);
+    const updated = {
+      ...updatedTask,
+      title: newTitle,
+      description: newDescription,
+    };
+    setUpdatedTask(updated);
+
+    fetch(`http://localhost:3030/notes/${task.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updated),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Обновленная задача:", data);
+        fetchTasks();
+      })
+      .catch((error) => {
+        console.error("Ошибка при обновлении задачи:", error);
+      });
+  };
+
   const handleDelete = async () => {
     try {
-      await deleteTask(task.id); // Удаляем задачу
-      fetchTasks(); // Обновляем список задач
+      await deleteTask(task.id);
+      fetchTasks();
     } catch (err) {
       console.error("Ошибка при удалении задачи:", err);
     }
@@ -31,6 +67,13 @@ function Task({ task, fetchTasks }) {
 
   return (
     <Box sx={{ width: "100%", padding: 2, position: "relative" }}>
+      <AlertDialogSlide
+        open={isDialogOpen}
+        onClose={handleClose}
+        onConfirm={handleConfirm}
+        title={task.title}
+        description={task.description}
+      />
       <Card variant="outlined" sx={{ marginBottom: 2 }}>
         <CardContent>
           <CancelOutlinedIcon
@@ -71,6 +114,7 @@ function Task({ task, fetchTasks }) {
                   color: "green",
                 },
               }}
+              onClick={handleOpen}
             />
             {currentStatus === "pending" && (
               <>
