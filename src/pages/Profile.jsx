@@ -3,6 +3,7 @@ import DefaultAppBar from "../components/AppBar";
 import { getUserProfile } from "../services/sendToken";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import AddUser from "../components/shareSelector";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -54,15 +55,18 @@ export default function Profile() {
   return (
     <Box sx={{ padding: 0, height: "100%" }}>
       <DefaultAppBar AuthStatus="profile" />
-      <Box p={2}>
-        <Typography variant="h5" gutterBottom>
-          Профиль: {user.username}
-        </Typography>
-        <Typography variant="h6" gutterBottom>
-          Есть доступ к заметкам:
-        </Typography>
-        <Box display="flex" flexWrap="wrap">
-          {accessCards}
+      <Box sx={{ display: "flex", flexDirection: "row-reverse" }}>
+        <AddUser />
+        <Box p={2}>
+          <Typography variant="h5" gutterBottom>
+            Профиль: {user.username}
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            Есть доступ к заметкам:
+          </Typography>
+          <Box display="flex" flexWrap="wrap">
+            {accessCards}
+          </Box>
         </Box>
       </Box>
     </Box>
