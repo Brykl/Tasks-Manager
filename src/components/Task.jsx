@@ -14,6 +14,7 @@ import changeStatus from "../services/statePut";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 import deleteTask from "../services/taskDelete";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Task({ task, fetchTasks }) {
   const [currentStatus, setCurrentStatus] = React.useState(task.status);
@@ -62,6 +63,15 @@ function Task({ task, fetchTasks }) {
             <Typography variant="body2" color="textSecondary">
               Deadline: {task.deadline}
             </Typography>
+            <EditIcon
+              sx={{
+                position: "absolute",
+                right: 220,
+                "&:hover": {
+                  color: "green",
+                },
+              }}
+            />
             {currentStatus === "pending" && (
               <>
                 <PlayCircleFilledWhiteIcon

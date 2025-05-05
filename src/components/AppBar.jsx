@@ -6,7 +6,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
+
 export default function DefaultAppBar({ AuthStatus }) {
+
   const navigate = useNavigate();
 
   return (
@@ -44,8 +46,19 @@ export default function DefaultAppBar({ AuthStatus }) {
             <Box
               sx={{ marginLeft: "auto", cursor: "pointer" }}
               onClick={() => {
-                localStorage.removeItem("token"); // удаляем токен
-                navigate("/login"); // переходим на страницу логина
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
+            >
+              <Typography sx={{ color: "white" }}>Выйти из аккаунта</Typography>
+            </Box>
+          )}
+          {AuthStatus === "notes" && (
+            <Box
+              sx={{ marginLeft: "auto", cursor: "pointer" }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login");
               }}
             >
               <Typography sx={{ color: "white" }}>Выйти из аккаунта</Typography>

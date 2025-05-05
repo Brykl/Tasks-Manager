@@ -9,26 +9,22 @@ function MainPage() {
   const { userName } = useParams();
   const [tasks, setTasks] = useState([]);
 
-  // Функция для загрузки задач
   const fetchTasks = () => {
-    const token = localStorage.getItem("token"); // Получаем токен из localStorage
+    const token = localStorage.getItem("token");
 
-    // Заголовки для авторизации
     const headers = {
-      Authorization: `Bearer ${token}`, // Добавляем Bearer токен
+      Authorization: `Bearer ${token}`,
     };
 
-    // Выполняем запрос для получения задач
     fetch(`http://localhost:3030/user/${userName}/notes`, { headers })
-      .then((res) => res.json()) // Получаем данные в формате JSON
+      .then((res) => res.json())
       .then((data) => {
-        setTasks(data); // Сохраняем задачи в состояние
+        setTasks(data);
         console.log("📥 Загрузили задачи:", data);
       })
-      .catch((err) => console.error("❌ Ошибка при загрузке задач:", err)); // Обработка ошибок
+      .catch((err) => console.error("❌ Ошибка при загрузке задач:", err));
   };
 
-  // Выполняем запрос при монтировании компонента или изменении userName
   useEffect(() => {
     fetchTasks();
   }, [userName]);
@@ -36,7 +32,7 @@ function MainPage() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box sx={{ flexShrink: 0 }}>
-        <DefaultAppBar />
+        <DefaultAppBar AuthStatus="notes" />
       </Box>
       <Box
         sx={{
