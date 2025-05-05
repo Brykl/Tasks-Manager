@@ -4,10 +4,26 @@ import Task from "../components/Task";
 import TaskForm from "../components/TaskForm";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { checkToken } from "../services/checkToken";
 
 function MainPage() {
   const { userName } = useParams();
   const [tasks, setTasks] = useState([]);
+  const [trueUserName, setTrueUserName] = useState(null);
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const res = await checkToken();
+        setTrueUserName(res.user.username);
+        console.log("Токен валиден:", res);
+        console.log("статус токена:", res.success);
+      } catch (err) {
+        console.error("Ошибка токена:", err.message);
+      }
+    };
+    verifyToken();
+  }, []);
 
   const fetchTasks = () => {
     const token = localStorage.getItem("token");
@@ -32,7 +48,7 @@ function MainPage() {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Box sx={{ flexShrink: 0 }}>
-        <DefaultAppBar AuthStatus="notes" />
+        <DefaultAppBar AuthStatus="notes" userName={trueUserName} />
       </Box>
       <Box
         sx={{

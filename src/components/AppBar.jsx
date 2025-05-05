@@ -5,10 +5,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-
-export default function DefaultAppBar({ AuthStatus }) {
-
+export default function DefaultAppBar({ AuthStatus, userName = "" }) {
   const navigate = useNavigate();
 
   return (
@@ -54,15 +53,35 @@ export default function DefaultAppBar({ AuthStatus }) {
             </Box>
           )}
           {AuthStatus === "notes" && (
-            <Box
-              sx={{ marginLeft: "auto", cursor: "pointer" }}
-              onClick={() => {
-                localStorage.removeItem("token");
-                navigate("/login");
-              }}
-            >
-              <Typography sx={{ color: "white" }}>Выйти из аккаунта</Typography>
-            </Box>
+            <>
+              <Box
+                sx={{
+                  marginLeft: "auto",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                  }}
+                >
+                  <Typography sx={{ color: "white" }}>
+                    Выйти из аккаунта
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(`/user/${userName}`);
+                  }}
+                >
+                  <AccountCircleIcon />
+                </Box>
+              </Box>
+            </>
           )}
         </Toolbar>
       </AppBar>
