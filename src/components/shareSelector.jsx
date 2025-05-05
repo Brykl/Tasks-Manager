@@ -14,7 +14,7 @@ import {
   Box,
   Alert,
 } from "@mui/material";
-import { Add, Remove } from "@mui/icons-material";
+import { Add, Remove} from "@mui/icons-material";
 import { getAccessList } from "../services/getAccessList";
 import { updateAccess } from "../services/sendAccessList";
 
@@ -49,7 +49,7 @@ export default function AccessControlPanel() {
     if (usersToAdd.length === 0) return;
 
     try {
-      await updateAccess(usersToAdd);
+      await updateAccess(selectedToAdd);
       setAccessGranted((prev) => [...prev, ...usersToAdd]);
       setAccessDenied((prev) =>
         prev.filter((user) => !usersToAdd.includes(user))
@@ -66,7 +66,7 @@ export default function AccessControlPanel() {
     if (selectedToRemove.length === 0) return;
 
     try {
-      await updateAccess(selectedToRemove);
+      await updateAccess(accessDenied);
       setAccessDenied((prev) => [...prev, ...selectedToRemove]);
       setAccessGranted((prev) =>
         prev.filter((user) => !selectedToRemove.includes(user))
@@ -94,17 +94,18 @@ export default function AccessControlPanel() {
         </Typography>
 
         <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
-          <TextField
+          {/* <TextField
             label="Добавить пользователя"
             value={newUser}
             onChange={(e) => setNewUser(e.target.value)}
             fullWidth
-          />
+          /> */}
           <Button
             variant="contained"
             color="success"
             onClick={handleAddAccess}
             disabled={!newUser.trim() && selectedToAdd.length === 0}
+            sx={{width: '100%'}}
           >
             Добавить
           </Button>
